@@ -1,0 +1,71 @@
+# SA Rates & Build-ups for OpenConstructionERP
+
+A module for [OpenConstructionERP](https://github.com/datadrivenconstruction/OpenConstructionERP) that installs a South African rate library into the app's own Costs and Assemblies. The library covers supplier-priced materials, BIBC-based labour, plant hire and ASAQS-style rate build-ups. A new pack each month updates the rates in place.
+
+This is an independent module by [Setout](https://setout.co.za). It is not part of OpenConstructionERP and is not endorsed by DataDrivenConstruction. The upstream project does not accept external pull requests, so the module is published here for anyone to install on their own instance.
+
+![Page with the v3.2 pack loaded](docs/preview.png)
+
+## What it does
+
+| In the rate pack | Becomes in OpenConstructionERP |
+|---|---|
+| Materials, labour, plant | Cost items in ZAR, region `ZA`, source `setout`. The rate is the City (Johannesburg) average excl VAT, and the supplier low–high range goes in the description. |
+| Build-ups | Assemblies tagged `setout-za`. Component costs exclude profit; profit is the bid factor. Small-town and rural uplifts are regional factors (`ZA_CITY`, `ZA_SMALL_TOWN`, `ZA_RURAL`) that you pick when applying an assembly to a BOQ. |
+
+- **Validation:** before installing, every build-up is checked. Its components plus profit must reproduce the published rate to the cent. If any check fails, nothing is installed.
+- **Monthly updates:** codes are stable (`ZA-SET-M-…`, `ZA-SET-L-…`, `ZA-SET-P-…`, `ZA-SET-A-…`), so a monthly pack changes prices in place and only what moved gets updated.
+- **Hand-edited assemblies:** if an assembly's recipe no longer matches the pack, it is listed and left alone.
+- **No backend changes:** it uses only existing endpoints.
+
+## Install
+
+Tested against OpenConstructionERP **18.8.0** (`321e514`).
+
+```bash
+git clone https://github.com/aidankoetaan-tech/openconstructionerp-sa-rates.git
+python openconstructionerp-sa-rates/install.py /path/to/OpenConstructionERP --check   # see what it will touch
+python openconstructionerp-sa-rates/install.py /path/to/OpenConstructionERP
+cd /path/to/OpenConstructionERP/frontend
+npx vitest run src/modules/sa-rates
+npm run build
+```
+
+The installer does three things and nothing else:
+
+1. Copies `module/sa-rates/` into `frontend/src/modules/`.
+2. Adds the manifest to `_registry.ts`.
+3. Adds the menu label to each locale file.
+
+It edits by anchor rather than by diff, so it survives unrelated upstream changes. Running it a second time changes nothing.
+
+Then enable **SA Rates & Build-ups** on the Modules page. It appears under **Cost Data** in the sidebar once Advanced mode is on.
+
+## Getting a rate pack
+
+The prices aren't in this repository. They come as a monthly JSON rate pack (`setout.za.ratepack/1`) published by Setout. The hosted download isn't live yet, so in the meantime ask for the current pack at **hello@setout.co.za**.
+
+You can load a pack in two ways:
+
+- **Upload the `.json` file.** This always works.
+- **Fetch it from a URL with an access key.** The browser only allows this if your deployment's CSP `connect-src` includes the pack host. Stock OpenConstructionERP doesn't allow it (`backend/app/middleware/security_headers.py`), so on a default install, use the upload.
+
+The pack format is defined and validated in [`module/sa-rates/data/ratepack.ts`](module/sa-rates/data/ratepack.ts). The unit tests use a two-build-up sample cut from the v3.2 pack (`data/fixturePack.ts`).
+
+## Checks run before each release
+
+- **Tests:** vitest for the module, the module registry, manifest i18n, sidebar and Modules-page suites.
+- **Types:** strict TypeScript over the module and its imports.
+- **Lint:** ESLint on the module.
+- **Rendered:** the page was rendered with a real pack loaded (see the preview above).
+- **Not yet tested against a live OpenConstructionERP backend.** The endpoint contracts were read from the 18.8.0 backend source.
+
+## Rates disclaimer
+
+These rates are estimating benchmarks taken from published supplier prices. Verify them against project quotations before any tender award or adjudication recommendation.
+
+## Licence
+
+AGPL-3.0-only, the same as OpenConstructionERP, which this module extends (see [LICENSE](LICENSE)). The licence covers the code. Rate packs are licensed separately by Setout.
+
+Copyright (c) 2026 Aidan Koetaan / Setout.
