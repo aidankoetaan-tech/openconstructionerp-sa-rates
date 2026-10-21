@@ -51,9 +51,36 @@ You can load a pack in two ways:
 | `data/ratepack.ts` | Pure logic: types, validation, payload mapping, install plan, component diff |
 | `data/*.test.ts`, `SaRatesModule.test.tsx` | vitest (`npx vitest run src/modules/sa-rates`) |
 
+## Rate movers (v0.5.0)
+
+The second tab compares two rate packs, usually last month's and this month's.
+The later pack defaults to the one loaded on the Rates tab.
+
+- Items are matched by code. Each resource and build-up is listed with both
+  rates, the change in rand and the change as a percentage.
+- New and dropped items are flagged. So is an item whose unit changed, and
+  no percentage is given for it, because the two rates measure different things.
+- For each build-up that moved, the driver is the component whose quantity ×
+  unit cost changed the direct cost most, excl profit. It is labelled as a
+  price change, a quantity change, or an added or removed component. If the
+  pack's profit setting changed, that is reported at the top, and it becomes
+  the driver of any build-up whose components did not move.
+- Each kind (materials, labour, plant, build-ups) gets the unweighted average
+  change across all its items, the count up, down and unchanged, and the
+  median of the items that moved.
+- The list can be filtered by kind and by a minimum percentage. It downloads as CSV.
+
+If the packs are uploaded in the wrong order, they are swapped by pricing date
+and a note says so.
+
+| File | Purpose |
+|---|---|
+| `data/movers.ts` | Pack comparison, build-up drivers, summaries, CSV (pure) |
+| `RateMovers.tsx` | The rate movers tab |
+
 ## CPAP escalation (v0.2.0)
 
-A second tab works out the JBCC contract price adjustment for an interim
+The CPAP tab works out the JBCC contract price adjustment for an interim
 payment certificate, work group by work group:
 
     A = 0.85 × V × (Xe / Xo − 1)
@@ -95,7 +122,7 @@ The calculator refuses a certificate dated after practical completion rather tha
 
 ## Payment certificate (v0.3.0)
 
-A third tab produces an interim payment certificate under the JBCC Principal
+The payment certificate tab produces an interim payment certificate under the JBCC Principal
 Building Agreement, Edition 6.2. Its lines follow the order of cl 25.3:
 
 1. Work executed and materials to date. Off-site materials count only when
@@ -136,7 +163,7 @@ Not covered:
 
 ## Tender adjudication (v0.4.0)
 
-A fourth tab scores a public construction tender under the Preferential
+The tender adjudication tab scores a public construction tender under the Preferential
 Procurement Regulations, 2022.
 
 - **System.** 80/20 when the estimated Rand value at invitation, including VAT,

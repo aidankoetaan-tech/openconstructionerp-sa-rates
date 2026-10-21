@@ -18,9 +18,22 @@ This is an independent module by [Setout](https://setout.co.za). It is not part 
 - **Hand-edited assemblies:** if an assembly's recipe no longer matches the pack, it is listed and left alone.
 - **No backend changes:** it uses only existing endpoints.
 
+## Rate movers (from v0.5.0)
+
+A tab that compares two rate packs, usually last month's and this month's, item by item:
+
+- **Changes:** both rates, the change in rand and the percentage, largest first. New, dropped and re-united items are flagged rather than given a percentage.
+- **Build-up drivers:** for each build-up that moved, the component that moved its direct cost most, and whether it was a price or a quantity change. A change in the profit setting is reported separately.
+- **Summary per kind:** the average change, the count up, down and unchanged, and the median of the movers.
+- **Filters and export:** filter by kind and by minimum percentage, and download the full list as CSV for a monthly rate sheet.
+
+![Rate movers tab](docs/movers.png)
+
+*The screenshot compares the v3.1 (08/09/2026) and v3.2 (28/09/2026) packs, filtered to moves of 15 % or more.*
+
 ## CPAP escalation (from v0.2.0)
 
-A second tab works out the JBCC contract price adjustment for an interim payment certificate, using `A = 0.85 × V × (Xe / Xo − 1)` for each work group.
+A tab works out the JBCC contract price adjustment for an interim payment certificate, using `A = 0.85 × V × (Xe / Xo − 1)` for each work group.
 
 - **Indices:** the CPAP work group indices from Stats SA release P0151.1, Table 1, which are free to use with Stats SA acknowledged. You can paste the table from the release or upload it as CSV.
 - **Index month:** the index month is picked by the 15th-of-the-month rule, and the months since the last certificate are averaged.
@@ -35,7 +48,7 @@ Details and sources are in [module/sa-rates/README.md](module/sa-rates/README.md
 
 ## Payment certificate (from v0.3.0)
 
-A third tab produces a JBCC PBA 6.2 interim payment certificate in the order of clause 25.3:
+A tab produces a JBCC PBA 6.2 interim payment certificate in the order of clause 25.3:
 
 - **Security adjustment:** worked out for whichever security the contractor chose (cl 11.1.1, 11.1.2 with the 95 % / 97.5 % / 100 % steps of cl 25.12, or 11.4.1).
 - **Off-site materials:** included only when they are covered by a guarantee (cl 25.5).
@@ -49,7 +62,7 @@ Exports to CSV. Details are in [module/sa-rates/README.md](module/sa-rates/READM
 
 ## Tender adjudication (from v0.4.0)
 
-A fourth tab scores a public construction tender under the Preferential Procurement Regulations, 2022:
+A tab scores a public construction tender under the Preferential Procurement Regulations, 2022:
 
 - **System:** 80/20 at or below an estimated R50 million including VAT, 90/10 above it (regs 4 and 5).
 - **Price points:** worked out against the lowest *responsive* price. A price more than double that scores negative points, which are flagged rather than clipped.
@@ -66,7 +79,7 @@ The tab does the arithmetic. Responsiveness and award stay with the bid committe
 
 ## Install
 
-Tested against OpenConstructionERP **18.8.0** (`321e514`). Current release: v0.4.0.
+Tested against OpenConstructionERP **18.8.0** (`321e514`). Current release: v0.5.0.
 
 ```bash
 git clone https://github.com/aidankoetaan-tech/openconstructionerp-sa-rates.git

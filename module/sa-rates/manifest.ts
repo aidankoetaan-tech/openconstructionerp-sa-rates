@@ -25,7 +25,7 @@ export const manifest: ModuleManifest = {
   id: 'sa-rates',
   name: 'modules.sa_rates.name',
   description: 'modules.sa_rates.description',
-  version: '0.4.0',
+  version: '0.5.0',
   icon: MapPin,
   category: 'estimation',
   defaultEnabled: false,
