@@ -77,6 +77,26 @@ The tab does the arithmetic. Responsiveness and award stay with the bid committe
 
 *The tenderers in the screenshot are made up.*
 
+## JBCC final account (from v0.7.0)
+
+A tab for the final account and final payment certificate under the JBCC Principal Building Agreement, Edition 6.2 (June 2024):
+
+- **Final contract value:** the contract sum adjusted under clause 26. That covers contract instructions by pricing basis (26.2.3 at cost plus 10 %), provisional work as executed, payments by the contractor plus 10 %, assessed expense and loss claims, PC amounts and provisional sums with prorated profit and attendance, preliminaries, cost fluctuations and rectifications.
+- **Claim checks:** notice, claim and assessment periods are counted in working days. Late notice forfeits the claim (26.5), and an unassessed claim is deemed refused (26.8).
+- **Final payment certificate:** 100 % of the final account plus the recovery statement, with no security retained (25.9).
+- **Dates:**
+  - final account due 60 working days after practical completion;
+  - 30 working days to accept, or the account is deemed accepted;
+  - 10 working days before a disagreement can be declared;
+  - final payment certificate 7 calendar days after acceptance, but not before final completion.
+- **Working days:** these exclude weekends, South African public holidays (Easter and the Sunday rule are worked out) and the contractor's annual holiday.
+
+Details are in [module/sa-rates/README.md](module/sa-rates/README.md).
+
+![JBCC final account tab](docs/jbcc-final.png)
+
+*The contract in the screenshot is made up.*
+
 ## NEC4 final account (from v0.6.0)
 
 A tab for the final assessment under the NEC4 Engineering and Construction Contract (June 2017), Options A to E:
@@ -98,7 +118,7 @@ Details are in [module/sa-rates/README.md](module/sa-rates/README.md).
 
 ## Install
 
-Tested against OpenConstructionERP **18.8.0** (`321e514`). Current release: v0.6.0.
+Tested against OpenConstructionERP **18.8.0** (`321e514`). Current release: v0.7.0.
 
 ```bash
 git clone https://github.com/aidankoetaan-tech/openconstructionerp-sa-rates.git

@@ -196,6 +196,59 @@ adjudication committees. Functionality scoring and income-generating tenders
 | `data/adjudication.ts` | PPPFA and CIDB arithmetic, responsiveness, ranking, CSV (pure) |
 | `Adjudication.tsx` | The adjudication tab |
 
+## JBCC final account (v0.7.0)
+
+The JBCC final account tab produces the final account and final payment
+certificate under the JBCC Principal Building Agreement, Edition 6.2 (June
+2024). It was read from the published agreement; no JBCC text is reproduced
+here.
+
+- **Final contract value.** The contract sum adjusted under clause 26:
+  - 26.2 contract instructions: similar work, adjusted rates, or cost plus 10 %
+    under 26.2.3 (entered at cost), with omissions deducted;
+  - 26.3 provisional work, remeasured as executed;
+  - 26.4 payments by the contractor for authorities' charges, opening up and
+    testing, and insurances, plus 10 %;
+  - 26.5 to 26.8 expense and loss claims, including delay under 23.2 and 23.3.
+    Only claims assessed under 26.7 are added;
+  - 26.9.1 and 26.9.2 prime cost amounts, budgetary allowances and provisional
+    sums, omitted and replaced by actual value, with profit and attendance
+    prorated under 26.9.3;
+  - 26.9.4 preliminaries, entered by the method in the Contract Data;
+  - 26.9.5 cost fluctuations and 26.9.6 rectifications.
+- **Claims check.** A notice given more than 20 working days after the
+  contractor became aware is forfeited (26.5). A claim submitted more than 40
+  working days after notice is flagged (26.6). One not assessed within 20
+  working days is deemed refused (26.8).
+- **Final payment certificate.** 100 % of the final account plus the recovery
+  statement (25.9), with no security retained (25.12.3, 11.4.1). It uses the
+  payment certificate tab's clause 25.3 arithmetic.
+- **Dates.**
+  - The final account is due 60 working days after practical completion (26.10).
+  - The contractor accepts within 30 working days, or the account is deemed
+    accepted (26.11).
+  - After a notice of non-acceptance, disagreement can be declared after 10
+    working days (26.12).
+  - The final payment certificate follows within 7 calendar days of acceptance,
+    but not before the certificate of final completion (26.13, 25.15).
+  - Payment is due in 14 calendar days from the employer (25.10), or 21 from
+    the contractor (25.11).
+- **Working days** exclude weekends, South African public holidays (Public
+  Holidays Act 36 of 1994, with Easter and the Sunday rule worked out), any
+  other proclaimed holiday entered, and the contractor's annual holiday from
+  the Contract Data.
+- **Guarantee for payment.** A final contract value more than 10 % above the
+  contract sum is flagged for adjustment under 11.7.
+
+Not covered: termination accounts (29.0), the nominated and selected
+subcontract accounts, and the preliminaries methods themselves.
+
+| File | Purpose |
+|---|---|
+| `data/jbccFinal.ts` | Clause 26 adjustments, claim checks, dates, final payment certificate, CSV (pure) |
+| `data/workingDays.ts` | SA public holidays, JBCC working days |
+| `JbccFinalAccount.tsx` | The JBCC final account tab |
+
 ## NEC4 final account (v0.6.0)
 
 The NEC4 final account tab produces the final assessment of the amount due

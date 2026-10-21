@@ -159,7 +159,7 @@ export function buildCertificate(i: CertificateInput): Certificate {
   if (i.security === 'none' && i.stage !== 'final' && i.withheldToDate > deduction) {
     notes.push(`Withholding capped at ${deduction.toFixed(2)} by cl 11.4.1.`);
   }
-  if (i.security === 'fixed' && i.workValue + materials > i.contractSum) {
+  if (i.security === 'fixed' && i.stage !== 'final' && i.workValue + materials > i.contractSum) {
     notes.push('Value above the contract sum is certified in full (cl 25.12).');
   }
 
