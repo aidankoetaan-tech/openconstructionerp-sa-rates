@@ -51,5 +51,47 @@ You can load a pack in two ways:
 | `data/ratepack.ts` | Pure logic: types, validation, payload mapping, install plan, component diff |
 | `data/*.test.ts`, `SaRatesModule.test.tsx` | vitest (`npx vitest run src/modules/sa-rates`) |
 
+## CPAP escalation (v0.2.0)
+
+A second tab works out the JBCC contract price adjustment for an interim
+payment certificate, work group by work group:
+
+    A = 0.85 × V × (Xe / Xo − 1)
+
+- **V:** the work value certified in the work group for the period, excl VAT.
+- **Xo:** the work group index for the base month, which is the month tenders closed.
+- **Xe:** the index for the valuation period:
+  - the month before the certificate date when the certificate is dated on or before the 15th;
+  - otherwise the month of the certificate;
+  - when more than one new index month has come out since the last certificate, the average of those months.
+
+The 0.85 constant is a setting on the page, and the 15th-of-the-month cut-off is a
+parameter of `calculateCertificate` in `data/cpap.ts`. Both defaults follow the JBCC CPAP Indices Application Manual (Series 2000 code
+2118, May 2005), clauses 5.1 and 7.1. Stats SA notes that updated manuals are
+available from ASAQS, so check the defaults against the manual your contract names.
+
+Indices are the Stats SA release P0151.1, Table 1 (CPAP work group indices),
+which are free to use with Stats SA acknowledged. You can paste the table or upload it
+as CSV, in either of two layouts:
+
+- work groups down and months across;
+- one `work group, month, value` per line.
+
+Decimal commas and the `r` revision mark are read as printed. The August 2026
+release is on base Dec 2023 = 100, and Xo and Xe must come from the same base.
+Indices are kept in the browser and can be downloaded as CSV.
+
+Not covered:
+
+- certificates after practical completion (manual cl 8.0);
+- provisional adjustments (cl 9.0).
+
+The calculator refuses a certificate dated after practical completion rather than estimating it.
+
+| File | Purpose |
+|---|---|
+| `data/cpap.ts` | Formula, index-month rule, averaging, index import/export (pure) |
+| `CpapCalculator.tsx` | The CPAP tab |
+
 The rates are estimating benchmarks taken from published supplier prices.
 Check them against project quotations before any tender award.

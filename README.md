@@ -18,9 +18,24 @@ This is an independent module by [Setout](https://setout.co.za). It is not part 
 - **Hand-edited assemblies:** if an assembly's recipe no longer matches the pack, it is listed and left alone.
 - **No backend changes:** it uses only existing endpoints.
 
+## CPAP escalation (from v0.2.0)
+
+A second tab works out the JBCC contract price adjustment for an interim payment certificate, using `A = 0.85 × V × (Xe / Xo − 1)` for each work group.
+
+- **Indices:** the CPAP work group indices from Stats SA release P0151.1, Table 1, which are free to use with Stats SA acknowledged. You can paste the table from the release or upload it as CSV.
+- **Index month:** the index month is picked by the 15th-of-the-month rule, and the months since the last certificate are averaged.
+- **Practical completion:** it stops at practical completion rather than guessing at the late-certificate method.
+- **Output:** a CSV for the recovery statement.
+
+Details and sources are in [module/sa-rates/README.md](module/sa-rates/README.md).
+
+![CPAP tab](docs/cpap.png)
+
+*In the screenshot, the July and August 2026 values are as published. The March 2026 base-month values are made up for illustration.*
+
 ## Install
 
-Tested against OpenConstructionERP **18.8.0** (`321e514`).
+Tested against OpenConstructionERP **18.8.0** (`321e514`). Current release: v0.2.0.
 
 ```bash
 git clone https://github.com/aidankoetaan-tech/openconstructionerp-sa-rates.git
