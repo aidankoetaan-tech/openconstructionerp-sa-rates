@@ -33,9 +33,23 @@ Details and sources are in [module/sa-rates/README.md](module/sa-rates/README.md
 
 *In the screenshot, the July and August 2026 values are as published. The March 2026 base-month values are made up for illustration.*
 
+## Payment certificate (from v0.3.0)
+
+A third tab produces a JBCC PBA 6.2 interim payment certificate in the order of clause 25.3:
+
+- **Security adjustment:** worked out for whichever security the contractor chose (cl 11.1.1, 11.1.2 with the 95 % / 97.5 % / 100 % steps of cl 25.12, or 11.4.1).
+- **Off-site materials:** included only when they are covered by a guarantee (cl 25.5).
+- **CPAP:** the cost fluctuations to date come from the CPAP tab.
+- **Recovery statement items** (cl 27.1): each one is placed before or after VAT as you choose.
+- **Payment dates:** 14 days after the date for issue for the employer (cl 25.10), and a further 7 for subcontractors (cl 25.13).
+
+Exports to CSV. Details are in [module/sa-rates/README.md](module/sa-rates/README.md).
+
+![Payment certificate tab](docs/certificate.png)
+
 ## Install
 
-Tested against OpenConstructionERP **18.8.0** (`321e514`). Current release: v0.2.0.
+Tested against OpenConstructionERP **18.8.0** (`321e514`). Current release: v0.3.0.
 
 ```bash
 git clone https://github.com/aidankoetaan-tech/openconstructionerp-sa-rates.git

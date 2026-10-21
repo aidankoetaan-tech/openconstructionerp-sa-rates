@@ -93,5 +93,43 @@ The calculator refuses a certificate dated after practical completion rather tha
 | `data/cpap.ts` | Formula, index-month rule, averaging, index import/export (pure) |
 | `CpapCalculator.tsx` | The CPAP tab |
 
+## Payment certificate (v0.3.0)
+
+A third tab produces an interim payment certificate under the JBCC Principal
+Building Agreement, Edition 6.2. Its lines follow the order of cl 25.3:
+
+1. Work executed and materials to date. Off-site materials count only when
+   they are covered by a guarantee (cl 25.5).
+2. Security adjustment, which depends on how the contractor chose to give security:
+   - **Fixed guarantee** (cl 11.1.2): 5 % of the value up to the contract sum
+     is held back until practical completion, 2.5 % after it, and none in the
+     final certificate (cl 25.12). Value above the contract sum, and cost
+     fluctuations, are certified in full.
+   - **Variable guarantee** (cl 11.1.1): no deduction.
+   - **No guarantee** (cl 11.4.1): the employer may withhold up to 10 % of the
+     contract sum, 2.5 % after practical completion. The clause sets only the
+     ceiling, so the amount withheld to date is entered and capped.
+3. Cost fluctuations to date (from the CPAP tab), gross certified, less
+   previously certified.
+4. Recovery statement amounts (cl 27.1), then tax, then interest, then other
+   non-taxable amounts. Each recovery item is placed before or after VAT by the
+   user, because the VAT treatment of a penalty or of damages is a tax
+   question, not a contract one.
+5. Net amount due, which can be negative (cl 25.2).
+
+The payment date is 14 calendar days after the date for issue (cl 25.10).
+Subcontractors are due 7 days after that (cl 25.13). On a negative
+certificate the contractor pays within 21 days (cl 25.11).
+
+Not covered:
+
+- the final account itself (cl 26);
+- NEC and GCC certificates.
+
+| File | Purpose |
+|---|---|
+| `data/certificate.ts` | Certificate arithmetic, security modes, recovery treatment, dates (pure) |
+| `PaymentCertificate.tsx` | The certificate tab |
+
 The rates are estimating benchmarks taken from published supplier prices.
 Check them against project quotations before any tender award.
