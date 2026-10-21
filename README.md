@@ -39,7 +39,7 @@ A third tab produces a JBCC PBA 6.2 interim payment certificate in the order of 
 
 - **Security adjustment:** worked out for whichever security the contractor chose (cl 11.1.1, 11.1.2 with the 95 % / 97.5 % / 100 % steps of cl 25.12, or 11.4.1).
 - **Off-site materials:** included only when they are covered by a guarantee (cl 25.5).
-- **CPAP:** the cost fluctuations to date come from the CPAP tab.
+- **CPAP:** cost fluctuations previously certified, plus this certificate's adjustment, which can be taken from the CPAP tab with one click (from v0.4.0).
 - **Recovery statement items** (cl 27.1): each one is placed before or after VAT as you choose.
 - **Payment dates:** 14 days after the date for issue for the employer (cl 25.10), and a further 7 for subcontractors (cl 25.13).
 
@@ -47,9 +47,26 @@ Exports to CSV. Details are in [module/sa-rates/README.md](module/sa-rates/READM
 
 ![Payment certificate tab](docs/certificate.png)
 
+## Tender adjudication (from v0.4.0)
+
+A fourth tab scores a public construction tender under the Preferential Procurement Regulations, 2022:
+
+- **System:** 80/20 at or below an estimated R50 million including VAT, 90/10 above it (regs 4 and 5).
+- **Price points:** worked out against the lowest *responsive* price. A price more than double that scores negative points, which are flagged rather than clipped.
+- **Specific goal points:** capped at 20 or 10. Ties are broken on goal points, and then left to the drawing of lots (reg 8).
+- **CIDB grade:** read off the tender value limits in force from 7 October 2019, unless the tender data sets its own minimum.
+- **Responsiveness:** CSD, tax compliance, active CIDB registration and returnables must all be "yes". A pending check keeps the tender out of the scoring.
+- **Price flags:** prices outside a set band around the estimate are flagged for a pricing review.
+
+The tab does the arithmetic. Responsiveness and award stay with the bid committees. Exports to CSV. Details are in [module/sa-rates/README.md](module/sa-rates/README.md).
+
+![Tender adjudication tab](docs/adjudication.png)
+
+*The tenderers in the screenshot are made up.*
+
 ## Install
 
-Tested against OpenConstructionERP **18.8.0** (`321e514`). Current release: v0.3.0.
+Tested against OpenConstructionERP **18.8.0** (`321e514`). Current release: v0.4.0.
 
 ```bash
 git clone https://github.com/aidankoetaan-tech/openconstructionerp-sa-rates.git

@@ -18,6 +18,17 @@ import {
   type SecurityMode,
   type Stage,
 } from './data/certificate';
+import { CPAP_LAST_KEY, type CpapLast } from './data/cpap';
+
+function readCpapLast(): CpapLast | null {
+  try {
+    const raw = window.localStorage.getItem(CPAP_LAST_KEY);
+    const v = raw ? (JSON.parse(raw) as CpapLast) : null;
+    return v && Number.isFinite(v.amount) ? v : null;
+  } catch {
+    return null;
+  }
+}
 
 const STORE_KEY = 'sa_rates.certificate_draft';
 
@@ -31,7 +42,10 @@ interface Form {
   materialsOnSite: string;
   materialsOffSite: string;
   offSiteCovered: boolean;
+  /** Cost fluctuations certified on earlier certificates. */
   costFluctuations: string;
+  /** Cost fluctuations for this certificate, usually from the CPAP tab. */
+  cpapThis: string;
   withheldToDate: string;
   previouslyCertified: string;
   vatRegistered: boolean;
@@ -58,6 +72,7 @@ const EMPTY: Form = {
   materialsOffSite: '',
   offSiteCovered: false,
   costFluctuations: '',
+  cpapThis: '',
   withheldToDate: '',
   previouslyCertified: '',
   vatRegistered: true,
@@ -96,6 +111,7 @@ export default function PaymentCertificate() {
   const [form, setForm] = useState<Form>(initial.form);
   const [recovery, setRecovery] = useState<RecoveryRow[]>(initial.recovery);
   const [preset, setPreset] = useState(RECOVERY_PRESETS[0]!.key);
+  const cpapLast = useMemo(readCpapLast, []);
 
   const set = <K extends keyof Form>(k: K, v: Form[K]) => setForm((f) => ({ ...f, [k]: v }));
 
@@ -108,7 +124,7 @@ export default function PaymentCertificate() {
       materialsOnSite: num(form.materialsOnSite),
       materialsOffSite: num(form.materialsOffSite),
       offSiteCovered: form.offSiteCovered,
-      costFluctuations: num(form.costFluctuations),
+      costFluctuations: num(form.costFluctuations) + num(form.cpapThis),
       withheldToDate: num(form.withheldToDate),
       previouslyCertified: num(form.previouslyCertified),
       recovery: recovery.map((r) => ({ description: r.description, clause: r.clause, amount: num(r.amount), treatment: r.treatment })),
@@ -229,9 +245,32 @@ export default function PaymentCertificate() {
           {money('materialsOffSite', t('sa_rates.pc.mat_off', { defaultValue: 'Materials off site (25.5)' }))}
           {money(
             'costFluctuations',
-            t('sa_rates.pc.cpa', { defaultValue: 'Cost fluctuations to date (25.3.4)' }),
-            t('sa_rates.pc.cpa_hint', { defaultValue: 'Cumulative CPAP from the CPAP tab' }),
+            t('sa_rates.pc.cpa_prev', { defaultValue: 'Cost fluctuations previously certified (25.3.4)' }),
           )}
+          <div>
+            {money(
+              'cpapThis',
+              t('sa_rates.pc.cpa_this', { defaultValue: 'Cost fluctuations this certificate' }),
+              t('sa_rates.pc.cpa_to_date', {
+                defaultValue: 'To date {{v}}',
+                v: zar(num(form.costFluctuations) + num(form.cpapThis)),
+              }),
+            )}
+            {cpapLast && (
+              <button
+                type="button"
+                className="mt-1 text-xs text-oe-blue hover:underline"
+                data-testid="sa-rates-certificate-use-cpap"
+                onClick={() => set('cpapThis', cpapLast.amount.toFixed(2))}
+              >
+                {t('sa_rates.pc.use_cpap', {
+                  defaultValue: 'Use the CPAP tab result: {{v}} ({{m}})',
+                  v: zar(cpapLast.amount),
+                  m: cpapLast.indexMonths.join(' + '),
+                })}
+              </button>
+            )}
+          </div>
           <label className="flex items-center gap-2 text-sm sm:col-span-2">
             <input
               type="checkbox"

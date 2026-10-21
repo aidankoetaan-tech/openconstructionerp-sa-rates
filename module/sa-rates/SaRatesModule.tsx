@@ -24,6 +24,7 @@ import { filterRows, planInstall, rateRows, validateRatePack, type InstallPlan, 
 
 const CpapCalculator = lazy(() => import('./CpapCalculator'));
 const PaymentCertificate = lazy(() => import('./PaymentCertificate'));
+const Adjudication = lazy(() => import('./Adjudication'));
 
 const URL_KEY = 'sa_rates.pack_url';
 const ROW_LIMIT = 200;
@@ -73,7 +74,7 @@ export default function SaRatesModule() {
   const [progress, setProgress] = useState<InstallProgress | null>(null);
   const [result, setResult] = useState<InstallResult | null>(null);
   const [query, setQuery] = useState('');
-  const [tab, setTab] = useState<'rates' | 'cpap' | 'certificate'>('rates');
+  const [tab, setTab] = useState<'rates' | 'cpap' | 'certificate' | 'adjudication'>('rates');
 
   const rows = useMemo(() => (pack ? rateRows(pack) : []), [pack]);
   const shown = useMemo(() => filterRows(rows, query), [rows, query]);
@@ -201,6 +202,7 @@ export default function SaRatesModule() {
             ['rates', t('sa_rates.tab_rates', { defaultValue: 'Rates & build-ups' })],
             ['cpap', t('sa_rates.tab_cpap', { defaultValue: 'CPAP escalation' })],
             ['certificate', t('sa_rates.tab_certificate', { defaultValue: 'Payment certificate' })],
+            ['adjudication', t('sa_rates.tab_adjudication', { defaultValue: 'Tender adjudication' })],
           ] as const
         ).map(([id, label]) => (
           <button
@@ -227,6 +229,12 @@ export default function SaRatesModule() {
       {tab === 'certificate' && (
         <Suspense fallback={null}>
           <PaymentCertificate />
+        </Suspense>
+      )}
+
+      {tab === 'adjudication' && (
+        <Suspense fallback={null}>
+          <Adjudication />
         </Suspense>
       )}
 

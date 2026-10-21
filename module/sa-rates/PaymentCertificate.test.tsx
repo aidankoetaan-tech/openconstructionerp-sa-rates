@@ -24,7 +24,8 @@ describe('PaymentCertificate', () => {
     type(/Gross previously certified/, '3000000');
     type(/Work executed/, '4000000');
     type(/Materials on site/, '200000');
-    type(/Cost fluctuations to date/, '50000');
+    type(/Cost fluctuations previously certified/, '30000');
+    type(/Cost fluctuations this certificate/, '20000');
 
     fireEvent.change(screen.getByLabelText('Recovery item type'), { target: { value: 'penalty' } });
     fireEvent.click(screen.getByText('Add to recovery statement'));
@@ -35,8 +36,26 @@ describe('PaymentCertificate', () => {
     fireEvent.change(amounts[1]!, { target: { value: '1500' } });
 
     // 4 040 000 gross − 3 000 000 − 20 000 = 1 020 000; + VAT 153 000; + interest 1 500
-    expect(screen.getByTestId('sa-rates-certificate-net').textContent).toMatch(/1[\s,.\u00a0]?174[\s,.\u00a0]?500[.,]00/);
+    // digit grouping depends on the number locale, so any one separator is accepted
+    expect(screen.getByTestId('sa-rates-certificate-net').textContent).toMatch(/1\D?174\D?500[.,]00/);
     expect(screen.getByTestId('sa-rates-certificate-due')).toHaveTextContent('Employer pays by 09/10/2026');
+  });
+
+  it('picks up the last CPAP tab result for this certificate', () => {
+    window.localStorage.setItem(
+      'sa_rates.cpap_last',
+      JSON.stringify({ amount: 12345.67, certificateDate: '2026-09-25', indexMonths: ['2026-08'] }),
+    );
+    render(<PaymentCertificate />);
+    type(/Cost fluctuations previously certified/, '10000');
+    fireEvent.click(screen.getByTestId('sa-rates-certificate-use-cpap'));
+    expect(screen.getByLabelText(/Cost fluctuations this certificate/)).toHaveValue(12345.67);
+    expect(screen.getByText(/^To date/).textContent).toMatch(/22\D?345[.,]67/);
+  });
+
+  it('offers no CPAP button when the CPAP tab has no complete result', () => {
+    render(<PaymentCertificate />);
+    expect(screen.queryByTestId('sa-rates-certificate-use-cpap')).toBeNull();
   });
 
   it('shows the cl 11.4.1 withholding field only when no guarantee was given', () => {

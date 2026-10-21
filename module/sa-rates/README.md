@@ -109,7 +109,10 @@ Building Agreement, Edition 6.2. Its lines follow the order of cl 25.3:
    - **No guarantee** (cl 11.4.1): the employer may withhold up to 10 % of the
      contract sum, 2.5 % after practical completion. The clause sets only the
      ceiling, so the amount withheld to date is entered and capped.
-3. Cost fluctuations to date (from the CPAP tab), gross certified, less
+3. Cost fluctuations to date: the amount previously certified plus the amount
+   for this certificate. Once the CPAP tab has a complete result (no missing
+   indices, no errors), it holds that result in the browser and the
+   certificate tab offers a button to use it. Then gross certified, less
    previously certified.
 4. Recovery statement amounts (cl 27.1), then tax, then interest, then other
    non-taxable amounts. Each recovery item is placed before or after VAT by the
@@ -130,6 +133,41 @@ Not covered:
 |---|---|
 | `data/certificate.ts` | Certificate arithmetic, security modes, recovery treatment, dates (pure) |
 | `PaymentCertificate.tsx` | The certificate tab |
+
+## Tender adjudication (v0.4.0)
+
+A fourth tab scores a public construction tender under the Preferential
+Procurement Regulations, 2022.
+
+- **System.** 80/20 when the estimated Rand value at invitation, including VAT,
+  is R50 million or less (reg 4); 90/10 above it (reg 5).
+- **Price points.** Ps = W × (1 − (Pt − Pmin) / Pmin), with W = 80 or 90 and
+  Pmin the lowest price among responsive tenders only. A tender priced at more
+  than double Pmin gets negative price points. The regulations set no floor,
+  so the tab flags this instead of clipping it.
+- **Specific goal points.** Entered as verified and capped at 20 or 10.
+- **Ties** (reg 8). Equal totals go to the tender with more specific goal points.
+  A tie on both is reported for the drawing of lots.
+- **CIDB grade.** The lowest grade whose tender value limit covers the estimate,
+  using the limits in force from 7 October 2019 (Gazette 42561). Where the tender
+  data sets a different minimum, enter it and that minimum is used instead.
+- **Responsiveness.** A tender is scored only when four checks are answered
+  "yes": CSD registration, tax compliance, an active CIDB registration and the
+  mandatory returnables. Its class of work and grade must also be adequate. A
+  check left pending keeps the tender out, the same as a "no".
+- **Price flags.** Prices more than a set percentage (default 15 %) above or
+  below the estimate are flagged for a pricing review. The flag does not
+  change the score.
+
+The tab does the arithmetic and records the checks. Deciding whether a tender
+is responsive, and the award itself, stay with the bid evaluation and
+adjudication committees. Functionality scoring and income-generating tenders
+(the Pmax formula) are not covered. The evaluation downloads as CSV.
+
+| File | Purpose |
+|---|---|
+| `data/adjudication.ts` | PPPFA and CIDB arithmetic, responsiveness, ranking, CSV (pure) |
+| `Adjudication.tsx` | The adjudication tab |
 
 The rates are estimating benchmarks taken from published supplier prices.
 Check them against project quotations before any tender award.

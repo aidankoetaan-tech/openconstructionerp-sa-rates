@@ -90,6 +90,16 @@ export type Month = string;
 /** Work group code → month → index value. */
 export type IndexTable = Record<string, Record<Month, number>>;
 
+/** Browser storage key for the last complete CPAP result, read by the payment certificate tab. */
+export const CPAP_LAST_KEY = 'sa_rates.cpap_last';
+
+export interface CpapLast {
+  /** Adjustment for this certificate, excl VAT. */
+  amount: number;
+  certificateDate: string;
+  indexMonths: Month[];
+}
+
 const MONTH_RE = /^\d{4}-(0[1-9]|1[0-2])$/;
 
 export function isMonth(v: string): v is Month {

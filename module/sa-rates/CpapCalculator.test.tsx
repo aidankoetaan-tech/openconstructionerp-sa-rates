@@ -38,6 +38,13 @@ describe('CpapCalculator', () => {
 
     // 18 236.36 + 13 812.50, grouping depends on the number locale
     expect(screen.getByTestId('sa-rates-cpap-total').textContent).toMatch(/32[\s,.\u00a0]?048[.,]86/);
+
+    // held for the payment certificate tab
+    expect(screen.getByTestId('sa-rates-cpap-handoff')).toBeInTheDocument();
+    const last = JSON.parse(window.localStorage.getItem('sa_rates.cpap_last') ?? 'null');
+    expect(last.amount).toBeCloseTo(32048.86, 2);
+    expect(last.certificateDate).toBe('2026-09-10');
+    expect(last.indexMonths).toEqual(['2026-08']);
   });
 
   it('says which index values are still needed', () => {
@@ -46,5 +53,8 @@ describe('CpapCalculator', () => {
     setField(/Certificate date/, '2026-09-20');
     fireEvent.change(screen.getAllByLabelText('Work value this period, excl VAT')[0]!, { target: { value: '1000' } });
     expect(screen.getByTestId('sa-rates-cpap-result')).toHaveTextContent('110 2026-02, 110 2026-09');
+    // an incomplete result is not handed to the certificate
+    expect(screen.queryByTestId('sa-rates-cpap-handoff')).toBeNull();
+    expect(window.localStorage.getItem('sa_rates.cpap_last')).toBeNull();
   });
 });

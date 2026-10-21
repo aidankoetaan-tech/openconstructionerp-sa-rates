@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 Aidan Koetaan / Setout (setout.co.za)
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Download, FileUp, Plus, Trash2 } from 'lucide-react';
 
@@ -10,12 +10,14 @@ import { formatCurrency } from '@/shared/lib/money';
 import { getNumberLocale } from '@/stores/usePreferencesStore';
 
 import {
+  CPAP_LAST_KEY,
   CPAP_WORK_GROUPS,
   DEFAULT_NON_ADJUSTABLE_FACTOR,
   STATS_SA_SOURCE,
   calculateCertificate,
   exportIndicesCsv,
   importIndices,
+  type CpapLast,
   type CpapLine,
   type IndexTable,
 } from './data/cpap';
@@ -92,6 +94,21 @@ export default function CpapCalculator() {
         : null,
     [ready, baseMonth, certDate, prevMonth, pcDate, k, rows, table],
   );
+
+  const complete = Boolean(result && result.errors.length === 0 && result.missing.length === 0 && result.lines.length > 0);
+  useEffect(() => {
+    if (!complete || !result) return;
+    const last: CpapLast = {
+      amount: result.totalAdjustment,
+      certificateDate: certDate,
+      indexMonths: result.lines[0]!.xeMonths,
+    };
+    try {
+      window.localStorage.setItem(CPAP_LAST_KEY, JSON.stringify(last));
+    } catch {
+      /* storage blocked: the certificate tab cannot pick this up */
+    }
+  }, [complete, result, certDate]);
 
   function runImport(text: string, origin: string) {
     const r = importIndices(text, table);
@@ -365,6 +382,11 @@ export default function CpapCalculator() {
               </table>
               <div className="mt-3 flex items-center justify-between gap-3">
                 <p className="text-xs text-content-tertiary">
+                  {complete && (
+                    <span className="block font-medium text-content-secondary" data-testid="sa-rates-cpap-handoff">
+                      {t('sa_rates.cpap.handoff', { defaultValue: 'Held for the payment certificate tab (25.3.4).' })}
+                    </span>
+                  )}
                   {STATS_SA_SOURCE}{' '}
                   {t('sa_rates.cpap.caveat', {
                     defaultValue:
