@@ -77,9 +77,28 @@ The tab does the arithmetic. Responsiveness and award stay with the bid committe
 
 *The tenderers in the screenshot are made up.*
 
+## NEC4 final account (from v0.6.0)
+
+A tab for the final assessment under the NEC4 Engineering and Construction Contract (June 2017), Options A to E:
+
+- **Price for Work Done to Date by Option:** Prices for completed work (A, B), or Defined Cost after Disallowed Cost plus the Fee (C, D, E).
+- **Contractor's share** (Options C and D, cl 54): the saving or excess worked increment by increment across the share ranges from the Contract Data. Under D it is measured against the Total of the Prices.
+- **Secondary options:**
+  - X1 price adjustment, paid under A and B and added to the target under C and D;
+  - the X6 bonus and X7 delay damages, worked out from the dates;
+  - the unrepaid X14 advanced payment, X17 low performance damages and cl 46 uncorrected Defects;
+  - X16 retention, which is released.
+- **Payment and dates:** the final payment as the change from the last amount due, plus tax. The cl 53 dates cover when the assessment is due, when payment is due, and the W1, W2 or W3 window after which the assessment becomes conclusive.
+
+Details are in [module/sa-rates/README.md](module/sa-rates/README.md).
+
+![NEC4 final account tab](docs/nec-final.png)
+
+*The contract in the screenshot is made up.*
+
 ## Install
 
-Tested against OpenConstructionERP **18.8.0** (`321e514`). Current release: v0.5.0.
+Tested against OpenConstructionERP **18.8.0** (`321e514`). Current release: v0.6.0.
 
 ```bash
 git clone https://github.com/aidankoetaan-tech/openconstructionerp-sa-rates.git

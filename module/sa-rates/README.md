@@ -196,5 +196,55 @@ adjudication committees. Functionality scoring and income-generating tenders
 | `data/adjudication.ts` | PPPFA and CIDB arithmetic, responsiveness, ranking, CSV (pure) |
 | `Adjudication.tsx` | The adjudication tab |
 
+## NEC4 final account (v0.6.0)
+
+The NEC4 final account tab produces the final assessment of the amount due
+under the NEC4 Engineering and Construction Contract (June 2017), Options A to
+E. It was read from the published ECC books: the core clauses, the main option
+clauses and the secondary options. No contract text is reproduced here.
+
+- **Price for Work Done to Date.**
+  - A: the final total of the Prices for completed activities, as entered.
+  - B: completed quantities × rates plus lump sums, as entered.
+  - C, D and E: the cost of the components, less each Disallowed Cost item,
+    plus the Fee at the fee percentage.
+- **Contractor's share** (C cl 54.1 to 54.4, D cl 54.5 to 54.8). The
+  difference between the target and PWDD is split across the share ranges,
+  which are set on PWDD ÷ Prices as a percentage. Each increment is shared at
+  its range's percentage. A saving is paid to the Contractor; the Contractor
+  pays its share of an excess. Under D the target is the Total of the Prices
+  (the BoQ value of the work completed). The ranges must start at 0 %, have no
+  gaps and leave the top one open.
+- **Price adjustment (X1).** Under A and B it is paid in the amount due
+  (X1.3). Under C and D it is added to the target (X1.4), so it moves the
+  share. It is not used with E.
+- **Other amounts:**
+  - X6 bonus and X7 delay damages are worked out from the dates; the X7.3
+    reduction for partial take-over is entered by hand;
+  - X14 advanced payment not repaid, X17 low performance damages and cl 46
+    uncorrected Defects;
+  - free lines for anything else due to or from the Contractor;
+  - X16 retention is nil, because nothing is retained once the Defects
+    Certificate is due.
+- **Payment.** The final payment is the change from the previous amount due,
+  with tax added under cl 51.5. A negative figure is paid by the Contractor.
+- **Dates (cl 53).**
+  - The assessment is due 4 weeks after the Defects Certificate, or 13 weeks
+    after a termination certificate.
+  - Payment is due 3 weeks after the assessment, or the Contract Data period.
+  - The assessment is conclusive unless it is referred within 4 weeks under
+    W1, W2 or W3.
+  - A late assessment is flagged with the Contractor's right under cl 53.2.
+
+Not covered: Option F, the amounts due on termination (cl 93), X3 multiple
+currencies, the X22 budget incentive calculation (enter the figure as another
+amount) and the NEC3 ECC. Check the Contract Data and any Z clauses before
+relying on the result.
+
+| File | Purpose |
+|---|---|
+| `data/necFinal.ts` | PWDD by Option, cl 54 share, secondary options, cl 53 dates, CSV (pure) |
+| `NecFinalAccount.tsx` | The NEC4 final account tab |
+
 The rates are estimating benchmarks taken from published supplier prices.
 Check them against project quotations before any tender award.
